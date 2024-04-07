@@ -120,12 +120,19 @@ const FriendRequests = () => {
         return <div>Loading...</div>; // Render a loading indicator while requests are being fetched
     }
 
+    if (!requests.length) {
+        return <div className='mt-36' style={{fontSize:48+'px'}}>No friend requests found</div>; // Render a message when there are no requests
+    }
+
+
+
     return (
-        <div>
+        <div className='mt-36  justify-center'>
             {requests.map((request) => (
                 <FriendRequest
                     key={request.user._id}
                     userId={request.user.username}
+                    picture={request.user.image}
                     handleAccept={() => handleAccept(request.user._id)}
                     handleReject={() => handleReject(request.user._id)}
                     answered={answered} // pass answered as prop to FriendRequest component

@@ -22,12 +22,14 @@ const MyProfile = () => {
     const [name, setName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [friendRemoved, setFriendRemoved] = useState(false);
-
+    const [picture, setPicture] = useState('')
+    const [friendRequestReceived, setFriendRequestReceived] = useState(false)
 
 
 
     useEffect(() => {
         const fetchPosts = async () => {
+          setIsLoading(true);
           try {
             const res = await fetch(`/api/users/${id.current}/posts`);
             if (!res.ok) {
@@ -35,6 +37,7 @@ const MyProfile = () => {
             }
             const data = await res.json();
             setPosts(data);
+            setIsLoading(false);
           } catch (error) {
             console.error('Error fetching posts:', error);
             // Handle the error gracefully, e.g., display a message to the user
@@ -42,7 +45,24 @@ const MyProfile = () => {
         }
         if(!id.current){
           id.current = session?.user.id.toString();
-        } 
+        } else {
+          const fetchSelf = async () => {
+            try {
+              const res = await fetch(`/api/profile/${session?.user.id}/requests`, {
+                  method: 'GET',
+              });
+              if (!res.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              const data = await res.json();
+              
+              setFriendRequestReceived(data.user.friend_requests.includes(id.current));
+          } catch (error) {
+              console.error('Error fetching user:', error);
+          } 
+          }
+          fetchSelf();
+        }
         const fetchUser = async () => {
           setIsLoading(true);
           try {
@@ -56,6 +76,7 @@ const MyProfile = () => {
               setAreFriends(data.user.friends.includes(session?.user.id.toString()));
               setName(data.user.username);
               setFriendRequestSent(data.user.friend_requests.includes(session?.user.id.toString()));
+              setPicture(data.user.image)
           } catch (error) {
               console.error('Error fetching user:', error);
           } finally {
@@ -68,7 +89,7 @@ const MyProfile = () => {
         }
         fetchPosts();
         fetchUser();
-      },[]);
+      },[session]);
 
     const handleEdit = (post) => {
       router.push(`/update-prompt?id=${post._id}`);
@@ -88,8 +109,8 @@ const MyProfile = () => {
           // Handle the error gracefully, e.g., display a message to the user
         }
       }
-
     }
+
 
     const handleAddFriend = async () => {
       const userId = session?.user.id; // Assuming session contains user information
@@ -160,12 +181,15 @@ const MyProfile = () => {
         }
     }
 
+    if(isLoading){
+      return <p>Loading...</p>
+    }
 
 
   return (
     <Profile
       name={name}
-      desc=""
+      picture={picture}
       data={posts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
@@ -175,6 +199,8 @@ const MyProfile = () => {
       areFriends={areFriends}
       friendRequestSent={friendRequestSent}
       friendRemoved = {friendRemoved}
+      id={id}
+      friendRequestReceived={friendRequestReceived}
     />
   )
 }

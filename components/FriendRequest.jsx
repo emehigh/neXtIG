@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
-const FriendRequest = ({userId, handleAccept, handleReject, answered}) => {
+const FriendRequest = ({userId,picture, handleAccept, handleReject, answered}) => {
   const [answeredVal, setAnsweredVal] = useState(0); // moved answered state to top-level
   useEffect(() => {
     setAnsweredVal(answered);
@@ -25,11 +26,21 @@ const FriendRequest = ({userId, handleAccept, handleReject, answered}) => {
   } else {
 
     return (
-      <div className="friend-request">
-        <p>{userId} wants to add you as a friend.</p>
-          <div className="flex">
-            <button className="red_btn" onClick={handleAccept}>Accept</button>
-            <button className="green_btn" onClick={handleReject}>Reject</button>
+      <div className="friend-request shadow-2xl p-5 rounded-xl">
+        <div className="flex mb-5 justify-center">
+            <Image
+            src={picture}
+            width={50}
+            height={50}
+            className='rounded-full'
+            alt="profile"
+            />
+            <p className="ml-5" style={{fontSize: 30 + 'px'}}>{userId} wants to add you as a friend.</p>
+        </div>
+        
+          <div className="flex justify-center gap-5">
+            <button className="black_btn" onClick={handleAccept}>Accept</button>
+            <button className="black_btn" onClick={handleReject}>Reject</button>
           </div>
       </div>
     );

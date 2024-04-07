@@ -45,6 +45,7 @@ export const POST = async (req, { params }) => {
 
 export const GET = async (req, { params }) => {
     const { id } = params;
+    
     try {
         await connectToDatabase();
         const user = await User.findById(id);

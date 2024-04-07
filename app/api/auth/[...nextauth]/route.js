@@ -9,6 +9,13 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     })
   ],
   callbacks: {
@@ -16,7 +23,6 @@ const handler = NextAuth({
       try {
         // Store the user id from MongoDB to session
         const sessionUser = await User.findOne({ email: session.user.email });
-
         // Update session to include user id and username
         session.user.id = sessionUser._id.toString();
         session.user.username = sessionUser.username;
@@ -26,6 +32,13 @@ const handler = NextAuth({
         console.error("Error retrieving user data:", error);
         return session;
       }
+    },
+    async jwt({ token, user, }) {
+      // Initial token setup or token update
+      if (user) {
+        token.sub = user.id.toString();
+      }
+      return token;
     },
     async signIn({ account, profile, user, credentials }) {
       try {

@@ -6,23 +6,39 @@ const PromptSchema = new Schema({
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        
     },
     prompt: {
         type: String,
         required: [true, "Prompt is required"],
     },
-    tag: {
-        type: String,
-        required: [true, "Tag is required"],
-    },
     likes:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        autopopulate: true, // Add autopopulate option to populate the 'likes' field automatically
+        autopopulate: true,
     }],
+    comments: [{
+        userId: {
+            type: String,
+            ref: "User",
+        },
+        comment: {
+            type: String,
+            required: true,
+        },
+    }],
+    referenceTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Prompt",
+        autopopulate: true,
+    },
+    creadtedAt: {
+        type: Date,
+        default: Date.now,
+    },
+    
 });
 
-// Apply the autopopulate plugin to automatically populate the 'likes' field
 PromptSchema.plugin(require('mongoose-autopopulate'));
 
 const Prompt = models.Prompt || model("Prompt", PromptSchema);

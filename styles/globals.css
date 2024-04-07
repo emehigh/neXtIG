@@ -16,10 +16,23 @@
   justify-content: center;
   padding: 120px 24px 160px 24px;
   pointer-events: none;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+textarea {
+  width: 100%;
+  height: 30px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
 }
 
 .main:before {
-  background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #fafafa 100%);
+  background: radial-gradient(circle, rgba(224, 224, 231, 0) 0, #fafafa 100%);
   position: absolute;
   content: "";
   z-index: 2;
@@ -30,7 +43,7 @@
 
 .main:after {
   content: "";
-  background-image: url("/assets/images/grid.svg");
+  background-image: linear-gradient(to bot, #e6deec, #ffffff);
   z-index: 1;
   position: absolute;
   width: 100%;
@@ -73,13 +86,22 @@
 
 /* Tailwind Styles */
 
+
 .app {
-  @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
+  @apply relative z-10 flex justify-center items-center flex-col mx-auto ;
+  width: 100%;
 }
 
 .black_btn {
   @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
 }
+.okBtn {
+  @apply rounded-full border border-black bg-white py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
+}
+.cooldownBtn {
+  @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all text-center text-sm font-inter flex items-center justify-center;
+}
+
 
 .red_btn {
   @apply rounded-full border border-red-500 bg-white text-red-500 py-1.5 px-5 transition-all hover:bg-red-500 hover:text-white text-center text-sm font-inter flex items-center justify-center;
@@ -132,12 +154,12 @@
 
 /* Feed Component */
 .feed {
-  @apply mt-16 mx-auto w-full max-w-xl flex justify-center items-center flex-col gap-2;
+  @apply mt-16 w-full max-w-4xl gap-2;
 }
 
 /* Form Component */
 .form_textarea {
-  @apply w-full flex rounded-lg h-[200px] mt-2 p-3 text-sm text-gray-500 outline-0;
+  @apply w-full flex rounded-lg h-[100px] mt-2 p-3 text-sm text-gray-500 outline-0;
 }
 
 .form_input {
@@ -159,7 +181,7 @@
 
 /* PromptCard Component */
 .prompt_card {
-  @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+  @apply flex-1 break-inside-avoid max-w-4xl rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter w-full h-fit mt-10;
 }
 
 .flex-center {
@@ -178,9 +200,6 @@
   @apply flex justify-between items-center;
 }
 
-.fa-heart {
-  color: red;
-}
 /* Define styles for the dropdown menu */
 .profile-dropdown {
   list-style-type: none; /* Remove bullet points */
